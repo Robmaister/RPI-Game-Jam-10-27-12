@@ -75,8 +75,6 @@ namespace MineEscape
 		{
 			base.OnUpdateFrame(e);
 
-			this.Title = "FPS - " + 1f / (float)e.Time;
-
 			StateManager.UpdateStateStack(states);
 
 			if (states.Count > 0)
