@@ -17,7 +17,23 @@ namespace MineEscape
 
 		static void Main(string[] args)
 		{
-			StateManager.PushState(new GameState());
+			MenuState startMenu = new MenuState("MineEscape", "\n\nRobert Rouhani, Craig Carlson, Domenic Cristaldi\n\nRPI Game Dev Club Gamejam 10/27/2012\n\n\n\nPress any key to continue...");
+			MenuState objectiveMenu = new MenuState("Objective", "\nA miner has accidentally unleashed an evil force deep in the mines.\nYou are the lone survivor who must escape the cave.\nFind the generator to activate power for the floor.\nEscape through the lift.\n\n\n\nPress any key to continue...");
+			MenuState controlsMenu = new MenuState("Controls", "\nWASD to move\n\nE to interact\n\nEsc to quit\n\n\nPress any key to continue...");
+			startMenu.OnPopped +=
+				(s, e) =>
+				{
+					startMenu.Reset();
+					StateManager.PushState(startMenu); //reset and loop
+					StateManager.PushState(objectiveMenu);
+				};
+			objectiveMenu.OnPopped +=
+				(s, e) =>
+				{
+					StateManager.PushState(controlsMenu);
+				};
+			controlsMenu.OnPopped += (s, e) => StateManager.PushState(new GameState(1));
+			StateManager.PushState(startMenu);
 			using (var window = new EscapeGameWindow())
 			{
 				window.Run();
@@ -30,17 +46,27 @@ namespace MineEscape
 		private Stack<IState> states;
 
 		public EscapeGameWindow()
-			: base(1024, 768)
+			: base(1024, 768, new GraphicsMode(new ColorFormat(24), 0, 8))
 		{
+			this.WindowBorder = OpenTK.WindowBorder.Fixed;
 			states = new Stack<IState>();
+			Title = "MineEscape";
 		}
 
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
-			Resources.LoadAll();
-			GL.ClearColor(Color4.CornflowerBlue);
 
+			Audio.AudioManager.Init();
+
+			Resources.LoadAll();
+
+			Audio.AudioManager.PlayMusic(Resources.Audio["background.wav"]);
+
+			GL.ClearColor(Color4.Black);
+
+			Keyboard.KeyDown += OnKeyDown;
+			Keyboard.KeyDown += OnKeyUp;
 			Mouse.ButtonUp += new EventHandler<MouseButtonEventArgs>(Mouse_ButtonUp);
 			Mouse.ButtonDown += new EventHandler<MouseButtonEventArgs>(Mouse_ButtonDown);
 		}
@@ -79,7 +105,7 @@ namespace MineEscape
 				states.Peek().OnResize(e, ClientSize);
 		}
 
-		protected override void OnKeyDown(KeyboardKeyEventArgs e)
+		protected void OnKeyDown(object sender, KeyboardKeyEventArgs e)
 		{
 			base.OnKeyDown(e);
 
@@ -87,7 +113,7 @@ namespace MineEscape
 				states.Peek().OnKeyDown(this, e, Keyboard, Mouse);
 		}
 
-		protected override void OnKeyUp(KeyboardKeyEventArgs e)
+		protected void OnKeyUp(object sender, KeyboardKeyEventArgs e)
 		{
 			base.OnKeyUp(e);
 

@@ -1,0 +1,17 @@
+Spawn 250 2148
+Generator 275 648
+Lift 2630 118
+Skeleton 300 448
+Goblin 2300 648
+Goblin 900 348
+Goblin 1200 1648
+Goblin 2400 1848
+PickaxeB 600 2048
+PickaxeB 1000 1248
+PickaxeB 2100 1648
+PickaxeB 2900 948
+PickaxeB 2800 1228
+PickaxeB 2000 1248
+Pickaxe 1700 848
+Pickaxe 1100 548
+Pickaxe 1500 1398

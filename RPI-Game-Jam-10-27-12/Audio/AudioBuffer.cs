@@ -9,65 +9,26 @@ namespace MineEscape.Audio
 	public class AudioBuffer
 	{
 		public int ID { get; private set; }
-		public int SourceID { get; private set; }
 
-		public ALSourceState State { get; private set; }
 		public ALFormat Format { get; private set; }
-
-		public bool Looping { get; set; }
-
-		private double updateTime;
 
 		public AudioBuffer(string path)
 		{
-			ID = AL.GenBuffer();
-			SourceID = AL.GenSource();
+			int id;
+			AL.GenBuffers(1, out id);
+
+			ID = id;
 
 			int channels, bps, rate;
 			byte[] soundData = LoadWav(new FileStream(path, FileMode.Open), out channels, out bps, out rate);
 
 			Format = GetSoundFormat(channels, bps);
-			State = ALSourceState.Initial;
 
 			AL.BufferData(ID, Format, soundData, soundData.Length, rate);
-			AL.Source(SourceID, ALSourcei.Buffer, ID);
-		}
-
-		public void Play()
-		{
-			AL.SourcePlay(SourceID);
-		}
-
-		public void Pause()
-		{
-			AL.SourcePause(SourceID);
-		}
-
-		public void Stop()
-		{
-			AL.SourceStop(SourceID);
-		}
-
-		public void Update(double time)
-		{
-			updateTime += time;
-
-			if (updateTime >= .25)
-			{
-				State = AL.GetSourceState(SourceID);
-			}
-
-			if (Looping && State == ALSourceState.Stopped)
-			{
-				Stop();
-				Play();
-			}
 		}
 
 		public void Unload()
 		{
-			AL.SourceStop(SourceID);
-			AL.DeleteSource(SourceID);
 			AL.DeleteBuffer(ID);
 		}
 

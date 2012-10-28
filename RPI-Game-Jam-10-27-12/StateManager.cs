@@ -19,6 +19,13 @@ namespace MineEscape
 					state.OnLoad(new EventArgs());
 					stack.Push(action.state);
 				}
+				else if (action.clearing)
+				{
+					while (stack.Count > 0)
+					{
+						stack.Pop().OnUnload(new EventArgs());
+					}
+				}
 				else
 				{
 					stack.Pop().OnUnload(new EventArgs());
@@ -26,6 +33,13 @@ namespace MineEscape
 			}
 
 			actions.Clear();
+		}
+
+		public static void ClearStates()
+		{
+			var a = new StateAction();
+			a.clearing = true;
+			actions.Enqueue(a);
 		}
 
 		public static void PushState(IState state)
@@ -42,6 +56,7 @@ namespace MineEscape
 		{
 			public IState state;
 			public bool adding;
+			public bool clearing;
 
 			public StateAction()
 			{

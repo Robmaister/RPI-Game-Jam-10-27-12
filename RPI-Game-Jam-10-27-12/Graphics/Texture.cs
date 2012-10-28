@@ -120,6 +120,8 @@ namespace MineEscape.Graphics
 			}
 		}
 
+		public static Texture Zero { get { return new Texture(); } }
+
 		#region Constructors
 
 		/// <summary>
@@ -184,6 +186,10 @@ namespace MineEscape.Graphics
 		/// <param name="wrapT">The way OpenGL will handle texture coordinates larger than <c>1.0f</c> on the T axis (Y axis).</param>
 		public Texture(string path, TextureMinFilter minFilter, TextureMagFilter magFilter, TextureWrapMode wrapS, TextureWrapMode wrapT)
 			: this(new Bitmap(path), minFilter, magFilter, wrapS, wrapT)
+		{
+		}
+
+		private Texture()
 		{
 		}
 

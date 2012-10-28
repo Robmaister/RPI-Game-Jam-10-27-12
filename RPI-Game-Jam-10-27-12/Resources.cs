@@ -30,7 +30,7 @@ namespace MineEscape
 				}
 			}
 
-			/*DirectoryInfo da = new DirectoryInfo("Resources/Audio");
+			DirectoryInfo da = new DirectoryInfo("Resources/Audio");
 
 			foreach (FileInfo f in da.GetFiles())
 			{
@@ -38,10 +38,10 @@ namespace MineEscape
 				{
 					Audio.Add(f.Name, new AudioBuffer(f.FullName));
 				}
-			}*/
+			}
 		}
 
-		public static void UpdateAudioBuffers(double time)
+		/*public static void UpdateAudioBuffers(double time)
 		{
 			foreach (KeyValuePair<string, AudioBuffer> pair in Audio)
 			{
@@ -56,7 +56,7 @@ namespace MineEscape
 				pair.Value.Stop();
 				pair.Value.Looping = false;
 			}
-		}
+		}*/
 
 		public static void UnloadTextures()
 		{

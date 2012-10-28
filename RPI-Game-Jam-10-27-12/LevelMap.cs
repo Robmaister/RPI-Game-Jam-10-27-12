@@ -17,9 +17,12 @@ namespace MineEscape
 		private int width, height;
 		private bool[][] collisionMap;
 
-		public LevelMap(float width, float height, Texture texture)
+		public LevelMap(Texture texture, Texture colMap)
 		{
 			this.texture = texture;
+
+			this.width = texture.Size.Width;
+			this.height = texture.Size.Height;
 
 			vertices = new float[]
 			{
@@ -43,27 +46,23 @@ namespace MineEscape
 				0, 2, 3
 			};
 
-			int widthI = texture.Size.Width;
-			int heightI = texture.Size.Height;
-
-			this.width = widthI;
-			this.height = heightI;
-
-			collisionMap = new bool[heightI][];
-			float[] alphas = new float[widthI * heightI];
-			GL.BindTexture(TextureTarget.Texture2D, texture);
+			collisionMap = new bool[height][];
+			float[] alphas = new float[width * height];
+			GL.BindTexture(TextureTarget.Texture2D, colMap);
 			GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.Alpha, PixelType.Float, alphas);
-			//GL.ReadPixels(0, 0, widthI, heightI, PixelFormat.Alpha, PixelType.Float, alphas);
 			for (int i = 0; i < collisionMap.Length; i++)
 			{
-				bool[] ba = new bool[widthI];
+				bool[] ba = new bool[width];
 				for (int j = 0; j < ba.Length; j++)
 				{
-					ba[j] = alphas[i * widthI + j] <= 0.1f;
+					ba[j] = alphas[i * width + j] <= 0.1f;
 				}
 
 				collisionMap[i] = ba;
 			}
+
+			GL.BindTexture(TextureTarget.Texture2D, 0);
+			colMap.Unload();
 		}
 
 		public void Draw()
@@ -97,6 +96,11 @@ namespace MineEscape
 			}
 
 			return false;
+		}
+
+		public void Unload()
+		{
+			texture.Unload();
 		}
 	}
 }

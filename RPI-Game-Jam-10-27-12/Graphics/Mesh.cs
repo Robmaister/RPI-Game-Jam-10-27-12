@@ -11,7 +11,7 @@ namespace MineEscape.Graphics
 		private float[] vertices;
 		private float[] texcoords;
 		private byte[] indices;
-		private Texture texture;
+		public Texture texture;
 
 		public Mesh(float width, float height, Texture texture)
 		{
@@ -48,8 +48,8 @@ namespace MineEscape.Graphics
 			GL.EnableClientState(ArrayCap.VertexArray);
 			GL.EnableClientState(ArrayCap.TextureCoordArray);
 
-			GL.VertexPointer(2, VertexPointerType.Float, 8, vertices);
-			GL.TexCoordPointer(2, TexCoordPointerType.Float, 8, texcoords);
+			GL.VertexPointer(2, VertexPointerType.Float, 0, vertices);
+			GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, texcoords);
 
 			GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, indices);
 
